@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Ivoir Rental"
+version = "1.0.0"
+id = "artifacts/ivoir-rental"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 26063
+
+[services.development]
+run = "pnpm --filter @workspace/ivoir-rental run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/ivoir-rental", "run", "build" ]
+publicDir = "artifacts/ivoir-rental/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "26063"
+BASE_PATH = "/"
