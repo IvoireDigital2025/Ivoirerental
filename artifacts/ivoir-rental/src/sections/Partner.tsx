@@ -151,7 +151,7 @@ export default function Partner() {
                   </div>
                   <h3 className="text-2xl font-display font-bold text-white mb-4">Inquiry Received!</h3>
                   <p className="text-gray-300 text-sm max-w-sm mb-8">
-                    Thanks for your interest in partnering with Ivoir Rental. Our fleet manager will contact you shortly to discuss next steps and earning potential.
+                    Thanks for your interest in partnering with Ivoire Rental. Our fleet manager will contact you shortly to discuss next steps and earning potential.
                   </p>
                   <button 
                     onClick={() => setSubmitted(false)}

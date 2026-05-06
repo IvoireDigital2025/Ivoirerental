@@ -32,7 +32,7 @@ export default function Nav() {
       >
         <div className="container mx-auto px-6 flex items-center justify-between">
           <a href="#" className="text-2xl font-bold font-display text-primary tracking-tight">
-            IVOIR RENTAL
+            IVOIRE RENTAL
           </a>
 
           {/* Desktop Nav */}

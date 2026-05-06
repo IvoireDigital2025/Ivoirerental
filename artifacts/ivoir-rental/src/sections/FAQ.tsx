@@ -46,7 +46,7 @@ export default function FAQ() {
               Common <span className="text-primary">Questions</span>
             </h2>
             <p className="text-muted-foreground text-lg mb-8">
-              Everything you need to know about renting with Ivoir.
+              Everything you need to know about renting with Ivoire.
             </p>
             
             <div className="hidden lg:flex flex-col gap-2">

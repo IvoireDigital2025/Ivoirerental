@@ -3,13 +3,13 @@ import { Star } from 'lucide-react';
 
 const reviews = [
   {
-    quote: "I was driving for Lyft within 48 hours of applying. Ivoir made it so simple — no drama, no credit check. I cleared over $900 my first week.",
+    quote: "I was driving for Lyft within 48 hours of applying. Ivoire made it so simple — no drama, no credit check. I cleared over $900 my first week.",
     name: "Marcus T.",
     platform: "Lyft Driver",
     initial: "M"
   },
   {
-    quote: "Other rental places turned me down. Ivoir approved me same day. The car is clean and the price is fair. I've been with them 6 months now.",
+    quote: "Other rental places turned me down. Ivoire approved me same day. The car is clean and the price is fair. I've been with them 6 months now.",
     name: "Destiny W.",
     platform: "Uber Driver",
     initial: "D"

@@ -8,7 +8,7 @@ export default function Footer() {
           
           <div>
             <div className="text-2xl font-bold font-display text-primary tracking-tight mb-6">
-              IVOIR RENTAL
+              IVOIRE RENTAL
             </div>
             <p className="text-muted-foreground text-sm leading-relaxed mb-6">
               Dallas–Fort Worth's premier rideshare vehicle rental service. Built for gig drivers who want premium vehicles without the red tape.
@@ -59,7 +59,7 @@ export default function Footer() {
         
         <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-muted-foreground text-xs">
-            © {new Date().getFullYear()} Ivoir Rental. All rights reserved.
+            © {new Date().getFullYear()} Ivoire Rental. All rights reserved.
           </p>
           <div className="flex gap-6">
             <a href="#" className="text-muted-foreground hover:text-white transition-colors text-xs">Privacy Policy</a>
