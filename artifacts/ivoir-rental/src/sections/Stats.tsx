@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 
 const stats = [
   { value: "200+", label: "Active Drivers" },
-  { value: "$200", label: "Starting / Week" },
+  { value: "$320", label: "Starting / Week" },
   { value: "24hr", label: "Approval" },
   { value: "4.9★", label: "Driver Rating" }
 ];

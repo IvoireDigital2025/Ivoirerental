@@ -4,7 +4,7 @@ import { Check } from 'lucide-react';
 const plans = [
   {
     name: "Basic",
-    price: "200",
+    price: "320",
     popular: false,
     features: [
       "Standard Sedan (e.g. Camry)",
@@ -16,7 +16,7 @@ const plans = [
   },
   {
     name: "Standard",
-    price: "249",
+    price: "380",
     popular: true,
     features: [
       "Mid-size SUV (e.g. CR-V)",
@@ -28,7 +28,7 @@ const plans = [
   },
   {
     name: "Premium",
-    price: "299",
+    price: "450",
     popular: false,
     features: [
       "Premium Sedan/SUV",

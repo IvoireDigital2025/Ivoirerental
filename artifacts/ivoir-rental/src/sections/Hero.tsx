@@ -194,7 +194,7 @@ export default function Hero() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl leading-relaxed"
           >
-            Weekly car rentals for Uber, Lyft & gig drivers. No credit check. Insurance included. Starting at $200/week.
+            Weekly car rentals for Uber, Lyft & gig drivers. No credit check. Insurance included. Starting at $320/week.
           </motion.p>
           
           <motion.div

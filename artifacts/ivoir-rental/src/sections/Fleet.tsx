@@ -5,7 +5,7 @@ const fleet = [
   {
     name: "Toyota Camry SE",
     subtitle: "Reliable & Efficient",
-    price: "$200",
+    price: "$320",
     popular: true,
     specs: [
       { icon: <Users size={16}/>, text: "5 Seats" },
@@ -17,7 +17,7 @@ const fleet = [
   {
     name: "Honda CR-V SUV",
     subtitle: "Spacious Comfort",
-    price: "$249",
+    price: "$380",
     popular: false,
     specs: [
       { icon: <Users size={16}/>, text: "5 Seats" },
@@ -29,7 +29,7 @@ const fleet = [
   {
     name: "Hyundai Sonata",
     subtitle: "Premium Sedan",
-    price: "$220",
+    price: "$350",
     popular: false,
     specs: [
       { icon: <Users size={16}/>, text: "5 Seats" },
