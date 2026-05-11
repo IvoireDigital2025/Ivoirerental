@@ -1,9 +1,9 @@
 services:
   - type: web
     name: ivoirerental
-    runtime: static
+    runtime: node
     buildCommand: pnpm install --frozen-lockfile && pnpm --filter @workspace/ivoir-rental run build
-    staticPublishPath: artifacts/ivoir-rental/dist/public
+    startCommand: pnpm start
     routes:
       - type: rewrite
         source: /*
