@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
+import logoSrc from '../assets/logo.png';
 
 const links = [
   { name: 'How It Works', href: '#how' },
@@ -31,8 +32,19 @@ export default function Nav() {
         }`}
       >
         <div className="container mx-auto px-6 flex items-center justify-between">
-          <a href="#" className="text-2xl font-bold font-display text-primary tracking-tight">
-            IVOIRE RENTAL
+          <a href="#" className="flex items-center" style={{ height: '56px', width: '200px', overflow: 'hidden', position: 'relative' }}>
+            <img
+              src={logoSrc}
+              alt="Ivoire Rental"
+              style={{
+                position: 'absolute',
+                height: '180px',
+                width: 'auto',
+                top: '-56px',
+                left: '-26px',
+                filter: 'brightness(0) invert(1)',
+              }}
+            />
           </a>
 
           {/* Desktop Nav */}

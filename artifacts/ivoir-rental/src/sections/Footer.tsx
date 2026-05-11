@@ -1,4 +1,5 @@
 import { Phone, Mail, MapPin } from 'lucide-react';
+import logoSrc from '../assets/logo.png';
 
 export default function Footer() {
   return (
@@ -7,8 +8,19 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
           
           <div>
-            <div className="text-2xl font-bold font-display text-primary tracking-tight mb-6">
-              IVOIRE RENTAL
+            <div className="mb-6" style={{ height: '72px', width: '260px', overflow: 'hidden', position: 'relative' }}>
+              <img
+                src={logoSrc}
+                alt="Ivoire Rental"
+                style={{
+                  position: 'absolute',
+                  height: '230px',
+                  width: 'auto',
+                  top: '-72px',
+                  left: '-33px',
+                  filter: 'brightness(0) invert(1)',
+                }}
+              />
             </div>
             <p className="text-muted-foreground text-sm leading-relaxed mb-6">
               Dallas–Fort Worth's premier rideshare vehicle rental service. Built for gig drivers who want premium vehicles without the red tape.
