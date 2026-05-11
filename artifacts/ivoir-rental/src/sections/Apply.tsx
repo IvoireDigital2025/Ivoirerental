@@ -2,13 +2,41 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2 } from 'lucide-react';
 
+const TO = 'info@ivoirerental.com';
+
 export default function Apply() {
   const [submitted, setSubmitted] = useState(false);
+  const [form, setForm] = useState({
+    firstName: '',
+    lastName: '',
+    phone: '',
+    email: '',
+    platform: '',
+    vehicle: '',
+    rideshareAccount: '',
+    notes: '',
+  });
+
+  const set = (field: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
+    setForm(prev => ({ ...prev, [field]: e.target.value }));
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const body = [
+      `Driver Application — Ivoire Rental`,
+      ``,
+      `Name: ${form.firstName} ${form.lastName}`,
+      `Phone: ${form.phone}`,
+      `Email: ${form.email}`,
+      `Primary Platform: ${form.platform}`,
+      `Vehicle Preference: ${form.vehicle}`,
+      `Active Rideshare Account: ${form.rideshareAccount}`,
+      `Notes: ${form.notes || 'N/A'}`,
+    ].join('\n');
+
+    const mailto = `mailto:${TO}?subject=${encodeURIComponent('Driver Application — Ivoire Rental')}&body=${encodeURIComponent(body)}`;
+    window.open(mailto, '_blank');
     setSubmitted(true);
-    // Note: No backend integration per requirements
   };
 
   return (
@@ -66,65 +94,98 @@ export default function Apply() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-2">
                         <label className="text-sm font-medium text-gray-300">First Name</label>
-                        <input required type="text" className="w-full bg-background border border-white/10 rounded-md px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all" />
+                        <input
+                          required type="text" value={form.firstName} onChange={set('firstName')}
+                          data-testid="input-first-name"
+                          className="w-full bg-background border border-white/10 rounded-md px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+                        />
                       </div>
                       <div className="space-y-2">
                         <label className="text-sm font-medium text-gray-300">Last Name</label>
-                        <input required type="text" className="w-full bg-background border border-white/10 rounded-md px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all" />
+                        <input
+                          required type="text" value={form.lastName} onChange={set('lastName')}
+                          data-testid="input-last-name"
+                          className="w-full bg-background border border-white/10 rounded-md px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+                        />
                       </div>
                     </div>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-2">
                         <label className="text-sm font-medium text-gray-300">Phone Number</label>
-                        <input required type="tel" className="w-full bg-background border border-white/10 rounded-md px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all" />
+                        <input
+                          required type="tel" value={form.phone} onChange={set('phone')}
+                          data-testid="input-phone"
+                          className="w-full bg-background border border-white/10 rounded-md px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+                        />
                       </div>
                       <div className="space-y-2">
                         <label className="text-sm font-medium text-gray-300">Email Address</label>
-                        <input required type="email" className="w-full bg-background border border-white/10 rounded-md px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all" />
+                        <input
+                          required type="email" value={form.email} onChange={set('email')}
+                          data-testid="input-email"
+                          className="w-full bg-background border border-white/10 rounded-md px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+                        />
                       </div>
                     </div>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-2">
                         <label className="text-sm font-medium text-gray-300">Primary Platform</label>
-                        <select required className="w-full bg-background border border-white/10 rounded-md px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all appearance-none">
+                        <select
+                          required value={form.platform} onChange={set('platform')}
+                          data-testid="select-platform"
+                          className="w-full bg-background border border-white/10 rounded-md px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all appearance-none"
+                        >
                           <option value="">Select Platform...</option>
-                          <option value="uber">Uber</option>
-                          <option value="lyft">Lyft</option>
-                          <option value="doordash">DoorDash</option>
-                          <option value="amazon">Amazon Flex</option>
-                          <option value="other">Other</option>
+                          <option value="Uber">Uber</option>
+                          <option value="Lyft">Lyft</option>
+                          <option value="DoorDash">DoorDash</option>
+                          <option value="Amazon Flex">Amazon Flex</option>
+                          <option value="Other">Other</option>
                         </select>
                       </div>
                       <div className="space-y-2">
                         <label className="text-sm font-medium text-gray-300">Vehicle Preference</label>
-                        <select required className="w-full bg-background border border-white/10 rounded-md px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all appearance-none">
+                        <select
+                          required value={form.vehicle} onChange={set('vehicle')}
+                          data-testid="select-vehicle"
+                          className="w-full bg-background border border-white/10 rounded-md px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all appearance-none"
+                        >
                           <option value="">Select Vehicle...</option>
-                          <option value="sedan">Standard Sedan (Camry, etc)</option>
-                          <option value="suv">Mid-size SUV (CR-V, etc)</option>
-                          <option value="any">Any Available</option>
+                          <option value="Standard Sedan (Camry, etc)">Standard Sedan (Camry, etc)</option>
+                          <option value="Mid-size SUV (CR-V, etc)">Mid-size SUV (CR-V, etc)</option>
+                          <option value="Any Available">Any Available</option>
                         </select>
                       </div>
                     </div>
                     
                     <div className="space-y-2">
                       <label className="text-sm font-medium text-gray-300">Do you have an active rideshare account?</label>
-                      <select required className="w-full bg-background border border-white/10 rounded-md px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all appearance-none">
+                      <select
+                        required value={form.rideshareAccount} onChange={set('rideshareAccount')}
+                        data-testid="select-rideshare"
+                        className="w-full bg-background border border-white/10 rounded-md px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all appearance-none"
+                      >
                         <option value="">Select...</option>
-                        <option value="yes">Yes, I am currently active</option>
-                        <option value="pending">No, but I am applying</option>
-                        <option value="no">No</option>
+                        <option value="Yes, I am currently active">Yes, I am currently active</option>
+                        <option value="No, but I am applying">No, but I am applying</option>
+                        <option value="No">No</option>
                       </select>
                     </div>
                     
                     <div className="space-y-2">
                       <label className="text-sm font-medium text-gray-300">Additional Notes (Optional)</label>
-                      <textarea rows={3} className="w-full bg-background border border-white/10 rounded-md px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all resize-none"></textarea>
+                      <textarea
+                        rows={3} value={form.notes} onChange={set('notes')}
+                        data-testid="textarea-notes"
+                        className="w-full bg-background border border-white/10 rounded-md px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all resize-none"
+                      />
                     </div>
                     
                     <button 
                       type="submit"
+                      data-testid="button-submit-application"
                       className="w-full py-4 bg-primary text-primary-foreground font-bold rounded-md hover:bg-accent transition-colors mt-4 text-lg shadow-[0_0_20px_rgba(212,168,67,0.3)] hover:shadow-[0_0_30px_rgba(212,168,67,0.5)]"
                     >
                       Submit Application →

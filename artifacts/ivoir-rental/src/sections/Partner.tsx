@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Shield, DollarSign, Map, Key, UserCheck, FileCheck, CheckCircle2 } from 'lucide-react';
 
+const TO = 'info@ivoirerental.com';
+
 const perks = [
   { icon: <DollarSign />, title: "Weekly Income", desc: "Consistent payouts for your vehicle" },
   { icon: <Shield />, title: "Insurance Protected", desc: "Commercial coverage included" },
@@ -13,9 +15,38 @@ const perks = [
 
 export default function Partner() {
   const [submitted, setSubmitted] = useState(false);
+  const [form, setForm] = useState({
+    firstName: '',
+    lastName: '',
+    phone: '',
+    email: '',
+    vehicleYearMake: '',
+    vehicleModel: '',
+    mileage: '',
+    numVehicles: '',
+    notes: '',
+  });
+
+  const set = (field: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
+    setForm(prev => ({ ...prev, [field]: e.target.value }));
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const body = [
+      `Fleet / Vehicle Partner Inquiry — Ivoire Rental`,
+      ``,
+      `Name: ${form.firstName} ${form.lastName}`,
+      `Phone: ${form.phone}`,
+      `Email: ${form.email}`,
+      `Vehicle Year & Make: ${form.vehicleYearMake}`,
+      `Vehicle Model: ${form.vehicleModel}`,
+      `Current Mileage: ${form.mileage}`,
+      `Number of Vehicles: ${form.numVehicles}`,
+      `Notes: ${form.notes || 'N/A'}`,
+    ].join('\n');
+
+    const mailto = `mailto:${TO}?subject=${encodeURIComponent('Fleet Inquiry — Ivoire Rental')}&body=${encodeURIComponent(body)}`;
+    window.open(mailto, '_blank');
     setSubmitted(true);
   };
 
@@ -88,52 +119,79 @@ export default function Partner() {
                   <h3 className="text-2xl font-display font-bold text-white mb-6">List Your Fleet</h3>
                   
                   <div className="grid grid-cols-2 gap-5">
-                    <div>
-                      <input required type="text" placeholder="First Name" className="w-full bg-card border border-white/10 rounded-md px-4 py-3 text-white focus:border-primary focus:ring-1 focus:ring-primary transition-all text-sm" />
-                    </div>
-                    <div>
-                      <input required type="text" placeholder="Last Name" className="w-full bg-card border border-white/10 rounded-md px-4 py-3 text-white focus:border-primary focus:ring-1 focus:ring-primary transition-all text-sm" />
-                    </div>
+                    <input
+                      required type="text" placeholder="First Name"
+                      value={form.firstName} onChange={set('firstName')}
+                      data-testid="input-partner-first-name"
+                      className="w-full bg-card border border-white/10 rounded-md px-4 py-3 text-white focus:border-primary focus:ring-1 focus:ring-primary transition-all text-sm"
+                    />
+                    <input
+                      required type="text" placeholder="Last Name"
+                      value={form.lastName} onChange={set('lastName')}
+                      data-testid="input-partner-last-name"
+                      className="w-full bg-card border border-white/10 rounded-md px-4 py-3 text-white focus:border-primary focus:ring-1 focus:ring-primary transition-all text-sm"
+                    />
                   </div>
                   
                   <div className="grid grid-cols-2 gap-5">
-                    <div>
-                      <input required type="tel" placeholder="Phone Number" className="w-full bg-card border border-white/10 rounded-md px-4 py-3 text-white focus:border-primary focus:ring-1 focus:ring-primary transition-all text-sm" />
-                    </div>
-                    <div>
-                      <input required type="email" placeholder="Email Address" className="w-full bg-card border border-white/10 rounded-md px-4 py-3 text-white focus:border-primary focus:ring-1 focus:ring-primary transition-all text-sm" />
-                    </div>
+                    <input
+                      required type="tel" placeholder="Phone Number"
+                      value={form.phone} onChange={set('phone')}
+                      data-testid="input-partner-phone"
+                      className="w-full bg-card border border-white/10 rounded-md px-4 py-3 text-white focus:border-primary focus:ring-1 focus:ring-primary transition-all text-sm"
+                    />
+                    <input
+                      required type="email" placeholder="Email Address"
+                      value={form.email} onChange={set('email')}
+                      data-testid="input-partner-email"
+                      className="w-full bg-card border border-white/10 rounded-md px-4 py-3 text-white focus:border-primary focus:ring-1 focus:ring-primary transition-all text-sm"
+                    />
                   </div>
                   
                   <div className="grid grid-cols-2 gap-5">
-                    <div>
-                      <input required type="text" placeholder="Vehicle Year & Make" className="w-full bg-card border border-white/10 rounded-md px-4 py-3 text-white focus:border-primary focus:ring-1 focus:ring-primary transition-all text-sm" />
-                    </div>
-                    <div>
-                      <input required type="text" placeholder="Vehicle Model" className="w-full bg-card border border-white/10 rounded-md px-4 py-3 text-white focus:border-primary focus:ring-1 focus:ring-primary transition-all text-sm" />
-                    </div>
+                    <input
+                      required type="text" placeholder="Vehicle Year & Make"
+                      value={form.vehicleYearMake} onChange={set('vehicleYearMake')}
+                      data-testid="input-partner-year-make"
+                      className="w-full bg-card border border-white/10 rounded-md px-4 py-3 text-white focus:border-primary focus:ring-1 focus:ring-primary transition-all text-sm"
+                    />
+                    <input
+                      required type="text" placeholder="Vehicle Model"
+                      value={form.vehicleModel} onChange={set('vehicleModel')}
+                      data-testid="input-partner-model"
+                      className="w-full bg-card border border-white/10 rounded-md px-4 py-3 text-white focus:border-primary focus:ring-1 focus:ring-primary transition-all text-sm"
+                    />
                   </div>
                   
                   <div className="grid grid-cols-2 gap-5">
-                    <div>
-                      <input required type="number" placeholder="Current Mileage" className="w-full bg-card border border-white/10 rounded-md px-4 py-3 text-white focus:border-primary focus:ring-1 focus:ring-primary transition-all text-sm" />
-                    </div>
-                    <div>
-                      <select required className="w-full bg-card border border-white/10 rounded-md px-4 py-3 text-white focus:border-primary focus:ring-1 focus:ring-primary transition-all appearance-none text-sm">
-                        <option value="">Number of Vehicles</option>
-                        <option value="1">1 vehicle</option>
-                        <option value="2-4">2-4 vehicles</option>
-                        <option value="5+">5+ vehicles</option>
-                      </select>
-                    </div>
+                    <input
+                      required type="number" placeholder="Current Mileage"
+                      value={form.mileage} onChange={set('mileage')}
+                      data-testid="input-partner-mileage"
+                      className="w-full bg-card border border-white/10 rounded-md px-4 py-3 text-white focus:border-primary focus:ring-1 focus:ring-primary transition-all text-sm"
+                    />
+                    <select
+                      required value={form.numVehicles} onChange={set('numVehicles')}
+                      data-testid="select-partner-num-vehicles"
+                      className="w-full bg-card border border-white/10 rounded-md px-4 py-3 text-white focus:border-primary focus:ring-1 focus:ring-primary transition-all appearance-none text-sm"
+                    >
+                      <option value="">Number of Vehicles</option>
+                      <option value="1 vehicle">1 vehicle</option>
+                      <option value="2-4 vehicles">2-4 vehicles</option>
+                      <option value="5+ vehicles">5+ vehicles</option>
+                    </select>
                   </div>
                   
-                  <div>
-                    <textarea rows={3} placeholder="Vehicle condition notes or questions..." className="w-full bg-card border border-white/10 rounded-md px-4 py-3 text-white focus:border-primary focus:ring-1 focus:ring-primary transition-all resize-none text-sm"></textarea>
-                  </div>
+                  <textarea
+                    rows={3} placeholder="Vehicle condition notes or questions..."
+                    value={form.notes} onChange={set('notes')}
+                    data-testid="textarea-partner-notes"
+                    className="w-full bg-card border border-white/10 rounded-md px-4 py-3 text-white focus:border-primary focus:ring-1 focus:ring-primary transition-all resize-none text-sm"
+                  />
                   
                   <button 
                     type="submit"
+                    data-testid="button-submit-fleet"
                     className="w-full py-4 bg-primary text-primary-foreground font-bold rounded-md hover:bg-accent transition-colors mt-2 text-base"
                   >
                     Submit Fleet Inquiry
