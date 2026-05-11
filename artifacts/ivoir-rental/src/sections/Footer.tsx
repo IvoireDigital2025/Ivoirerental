@@ -46,7 +46,7 @@ export default function Footer() {
               </li>
               <li className="flex items-start gap-3">
                 <Mail className="w-5 h-5 text-primary shrink-0" />
-                <span className="text-muted-foreground text-sm">drive@ivoirrental.com</span>
+                <span className="text-muted-foreground text-sm">info@ivoirerental.com</span>
               </li>
               <li className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-primary shrink-0" />

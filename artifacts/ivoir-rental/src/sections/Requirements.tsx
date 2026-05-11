@@ -88,7 +88,7 @@ export default function Requirements() {
                 </div>
                 <div>
                   <div className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Email Us</div>
-                  <div className="font-medium">drive@ivoirrental.com</div>
+                  <div className="font-medium">info@ivoirerental.com</div>
                 </div>
               </div>
               
