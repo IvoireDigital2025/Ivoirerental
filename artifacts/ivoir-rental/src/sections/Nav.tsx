@@ -32,17 +32,18 @@ export default function Nav() {
         }`}
       >
         <div className="container mx-auto px-6 flex items-center justify-between">
-          <a href="#" className="flex items-center" style={{ height: '56px', width: '200px', overflow: 'hidden', position: 'relative' }}>
+          <a href="#" className="flex items-center" style={{ height: '88px', width: '270px', overflow: 'hidden', position: 'relative' }}>
             <img
               src={logoSrc}
               alt="Ivoire Rental"
               style={{
                 position: 'absolute',
-                height: '180px',
+                height: '260px',
                 width: 'auto',
-                top: '-56px',
-                left: '-26px',
+                top: '-99px',
+                left: '-18px',
                 filter: 'brightness(0) invert(1)',
+                imageRendering: 'auto',
               }}
             />
           </a>

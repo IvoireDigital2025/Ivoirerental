@@ -8,17 +8,18 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
           
           <div>
-            <div className="mb-6" style={{ height: '72px', width: '260px', overflow: 'hidden', position: 'relative' }}>
+            <div className="mb-6" style={{ height: '110px', width: '340px', overflow: 'hidden', position: 'relative' }}>
               <img
                 src={logoSrc}
                 alt="Ivoire Rental"
                 style={{
                   position: 'absolute',
-                  height: '230px',
+                  height: '330px',
                   width: 'auto',
-                  top: '-72px',
-                  left: '-33px',
+                  top: '-126px',
+                  left: '-22px',
                   filter: 'brightness(0) invert(1)',
+                  imageRendering: 'auto',
                 }}
               />
             </div>
