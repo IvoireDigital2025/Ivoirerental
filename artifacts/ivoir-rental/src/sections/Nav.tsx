@@ -12,7 +12,7 @@ const links = [
   { name: 'List Your Car', href: '#partner' }
 ];
 
-export default function Nav() {
+export default function Nav({ onBook }: { onBook?: () => void }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -59,12 +59,12 @@ export default function Nav() {
                 {link.name}
               </a>
             ))}
-            <a 
-              href="#apply"
+            <button
+              onClick={onBook}
               className="px-6 py-2.5 bg-primary text-primary-foreground text-sm font-bold rounded-md hover:bg-accent transition-colors"
             >
-              Apply Now
-            </a>
+              Book Now
+            </button>
           </div>
 
           {/* Mobile Menu Toggle */}
@@ -97,13 +97,12 @@ export default function Nav() {
                   {link.name}
                 </a>
               ))}
-              <a 
-                href="#apply"
-                onClick={() => setMobileMenuOpen(false)}
-                className="mt-4 px-6 py-3 bg-primary text-primary-foreground text-center font-bold rounded-md hover:bg-accent transition-colors"
+              <button
+                onClick={() => { setMobileMenuOpen(false); onBook?.(); }}
+                className="mt-4 px-6 py-3 bg-primary text-primary-foreground text-center font-bold rounded-md hover:bg-accent transition-colors w-full"
               >
-                Apply Now
-              </a>
+                Book Now
+              </button>
             </div>
           </motion.div>
         )}

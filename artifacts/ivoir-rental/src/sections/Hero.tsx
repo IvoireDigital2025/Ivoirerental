@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 
-export default function Hero() {
+export default function Hero({ onBook }: { onBook?: () => void }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -203,13 +203,13 @@ export default function Hero() {
             transition={{ duration: 0.5, delay: 0.3 }}
             className="flex flex-col sm:flex-row gap-4 mb-12"
           >
-            <a 
-              href="#apply"
+            <button
+              onClick={onBook}
               data-testid="hero-btn-apply"
               className="inline-flex justify-center items-center px-8 py-4 bg-primary text-primary-foreground font-bold rounded-md hover:bg-accent transition-colors duration-300"
             >
-              Apply Now
-            </a>
+              Book Now
+            </button>
             <a 
               href="#fleet"
               data-testid="hero-btn-fleet"

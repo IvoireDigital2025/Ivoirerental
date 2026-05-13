@@ -40,7 +40,9 @@ const fleet = [
   }
 ];
 
-export default function Fleet() {
+const CAR_KEYS = ['camry', 'crv', 'sonata'];
+
+export default function Fleet({ onBook }: { onBook?: (carKey: string) => void }) {
   return (
     <section id="fleet" className="py-24 bg-card border-y border-white/5">
       <div className="container mx-auto px-6">
@@ -60,7 +62,9 @@ export default function Fleet() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {fleet.map((car, i) => (
+          {fleet.map((car, i) => {
+            const carKey = CAR_KEYS[i];
+            return (
             <motion.div
               key={i}
               initial={{ opacity: 0, y: 20 }}
@@ -104,13 +108,16 @@ export default function Fleet() {
                     <span className="text-3xl font-bold text-white">{car.price}</span>
                     <span className="text-muted-foreground text-sm">/wk</span>
                   </div>
-                  <button className="px-6 py-2.5 bg-white/10 hover:bg-primary hover:text-primary-foreground text-white font-medium rounded-md transition-colors">
+                  <button
+                    onClick={() => onBook?.(carKey)}
+                    className="px-6 py-2.5 bg-white/10 hover:bg-primary hover:text-primary-foreground text-white font-medium rounded-md transition-colors"
+                  >
                     Book This Car
                   </button>
                 </div>
               </div>
             </motion.div>
-          ))}
+          );})}
         </div>
       </div>
     </section>

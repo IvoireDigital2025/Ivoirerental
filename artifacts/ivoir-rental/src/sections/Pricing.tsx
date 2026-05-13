@@ -40,7 +40,7 @@ const plans = [
   }
 ];
 
-export default function Pricing() {
+export default function Pricing({ onBook }: { onBook?: () => void }) {
   return (
     <section id="pricing" className="py-24 bg-background">
       <div className="container mx-auto px-6">
@@ -86,14 +86,15 @@ export default function Pricing() {
                 ))}
               </ul>
               
-              <button 
+              <button
+                onClick={onBook}
                 className={`w-full py-3 rounded-md font-bold transition-colors ${
                   plan.popular 
                     ? 'bg-primary text-primary-foreground hover:bg-accent' 
                     : 'bg-white/10 text-white hover:bg-white/20'
                 }`}
               >
-                Choose {plan.name}
+                Book Now
               </button>
             </motion.div>
           ))}
