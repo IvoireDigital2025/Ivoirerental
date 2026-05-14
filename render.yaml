@@ -2,11 +2,8 @@ services:
   - type: web
     name: ivoirerental
     runtime: node
-    buildCommand: npm install -g pnpm@10 && pnpm install --no-frozen-lockfile && pnpm --filter @workspace/ivoir-rental run build
+    buildCommand: pnpm install --frozen-lockfile && pnpm --filter @workspace/ivoir-rental run build
     startCommand: pnpm start
-    envVars:
-      - key: NODE_VERSION
-        value: "20"
     routes:
       - type: rewrite
         source: /*
