@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ivoirerental.onrender.com/sitemap.xml

@@ -11,6 +11,7 @@ import Pricing from "@/sections/Pricing";
 import Requirements from "@/sections/Requirements";
 import Reviews from "@/sections/Reviews";
 import FAQ from "@/sections/FAQ";
+import ServiceAreas from "@/sections/ServiceAreas";
 import Apply from "@/sections/Apply";
 import Partner from "@/sections/Partner";
 import Footer from "@/sections/Footer";
@@ -53,6 +54,7 @@ export default function Home() {
         <Requirements />
         <Reviews />
         <FAQ />
+        <ServiceAreas />
         <Apply />
         <Partner />
       </main>
