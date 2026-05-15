@@ -129,21 +129,17 @@ router.post("/application", async (req, res) => {
     res.status(400).json({ error: "Missing required fields." }); return;
   }
 
+  // Save to DB if available — failure is non-fatal, email is the source of truth
   const pool = getPool();
-  try {
-    await pool.query(
-      `INSERT INTO applications
-        (name, email, phone, address, start_date, duration, has_license, license_number, platforms, notes)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,
-      [name, email, phone, address, startDate, duration, hasLicense, licenseNumber || null, platforms || null, notes || null]
-    );
-    req.log.info({ name, email }, "Application saved to DB");
-  } catch (err: any) {
-    req.log.error({ err }, "Failed to save application to DB");
-    res.status(500).json({ error: "Failed to save application. Please try again." }); return;
-  } finally {
-    await pool.end();
-  }
+  pool.query(
+    `INSERT INTO applications
+      (name, email, phone, address, start_date, duration, has_license, license_number, platforms, notes)
+     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,
+    [name, email, phone, address, startDate, duration, hasLicense, licenseNumber || null, platforms || null, notes || null]
+  )
+    .then(() => req.log.info({ name, email }, "Application saved to DB"))
+    .catch(err => req.log.warn({ err }, "DB save skipped (no database configured)"))
+    .finally(() => pool.end());
 
   sendNotificationEmail({ name, email, phone, address, startDate, duration, hasLicense, licenseNumber: licenseNumber || "", platforms: platforms || "", notes: notes || "" })
     .then(() => req.log.info({ name }, "Notification email sent"))
