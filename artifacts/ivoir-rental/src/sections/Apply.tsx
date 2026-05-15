@@ -14,6 +14,8 @@ export default function Apply() {
     platform: '',
     vehicle: '',
     rideshareAccount: '',
+    hasLicense: '',
+    rentalLength: '',
     notes: '',
   });
 
@@ -31,6 +33,8 @@ export default function Apply() {
       `Primary Platform: ${form.platform}`,
       `Vehicle Preference: ${form.vehicle}`,
       `Active Rideshare Account: ${form.rideshareAccount}`,
+      `Valid Driver's License: ${form.hasLicense}`,
+      `Rental Length: ${form.rentalLength}`,
       `Notes: ${form.notes || 'N/A'}`,
     ].join('\n');
 
@@ -174,6 +178,35 @@ export default function Apply() {
                       </select>
                     </div>
                     
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium text-gray-300">Do you have a valid driver's license?</label>
+                        <select
+                          required value={form.hasLicense} onChange={set('hasLicense')}
+                          className="w-full bg-background border border-white/10 rounded-md px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all appearance-none"
+                        >
+                          <option value="">Select...</option>
+                          <option value="Yes — valid & current">Yes — valid &amp; current</option>
+                          <option value="Yes — but expired">Yes — but expired</option>
+                          <option value="No">No</option>
+                        </select>
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium text-gray-300">How long do you need the vehicle?</label>
+                        <select
+                          required value={form.rentalLength} onChange={set('rentalLength')}
+                          className="w-full bg-background border border-white/10 rounded-md px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all appearance-none"
+                        >
+                          <option value="">Select duration...</option>
+                          <option value="1 Month">1 Month</option>
+                          <option value="2 Months">2 Months</option>
+                          <option value="3 Months">3 Months</option>
+                          <option value="6 Months">6 Months</option>
+                          <option value="Long Term">Long Term</option>
+                        </select>
+                      </div>
+                    </div>
+
                     <div className="space-y-2">
                       <label className="text-sm font-medium text-gray-300">Additional Notes (Optional)</label>
                       <textarea
