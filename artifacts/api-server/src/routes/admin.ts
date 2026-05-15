@@ -30,11 +30,11 @@ router.get('/cars', requireAdmin, async (_req, res) => {
 });
 
 // Toggle car availability
-router.patch('/cars/:carKey', requireAdmin, async (req, res) => {
+router.patch('/cars/:carKey', requireAdmin, async (req, res): Promise<void> => {
   const { carKey } = req.params;
   const { available } = req.body;
   if (typeof available !== 'boolean') {
-    return res.status(400).json({ error: 'available must be a boolean' });
+    res.status(400).json({ error: 'available must be a boolean' }); return;
   }
   const pool = getPool();
   try {
@@ -43,7 +43,7 @@ router.patch('/cars/:carKey', requireAdmin, async (req, res) => {
        WHERE car_key = $2 RETURNING car_key, car_name, available, updated_at`,
       [available, carKey]
     );
-    if (!rows[0]) return res.status(404).json({ error: 'Car not found' });
+    if (!rows[0]) { res.status(404).json({ error: 'Car not found' }); return; }
     res.json({ car: rows[0] });
   } finally {
     await pool.end();

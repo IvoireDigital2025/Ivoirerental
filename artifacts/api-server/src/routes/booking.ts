@@ -37,15 +37,15 @@ router.get('/stripe-key', async (_req, res) => {
   res.json({ publishableKey });
 });
 
-router.post('/checkout', async (req, res) => {
+router.post('/checkout', async (req, res): Promise<void> => {
   const { carKey, customerName, customerEmail, customerPhone } = req.body;
 
   if (!carKey || !customerName || !customerEmail || !customerPhone) {
-    return res.status(400).json({ error: 'Missing required fields' });
+    res.status(400).json({ error: 'Missing required fields' }); return;
   }
 
   const car = CARS[carKey];
-  if (!car) return res.status(400).json({ error: 'Invalid car selection' });
+  if (!car) { res.status(400).json({ error: 'Invalid car selection' }); return; }
 
   const pool = getPool();
   try {
@@ -54,7 +54,7 @@ router.post('/checkout', async (req, res) => {
       [carKey]
     );
     if (!rows[0]?.available) {
-      return res.status(409).json({ error: 'This vehicle is no longer available' });
+      res.status(409).json({ error: 'This vehicle is no longer available' }); return;
     }
 
     const stripe = await getUncachableStripeClient();
@@ -94,18 +94,18 @@ router.post('/checkout', async (req, res) => {
 
 router.post('/webhook-confirm', async (req, res) => {
   const { sessionId } = req.body;
-  if (!sessionId) return res.status(400).json({ error: 'Missing sessionId' });
+  if (!sessionId) { res.status(400).json({ error: 'Missing sessionId' }); return; }
 
   const stripe = await getUncachableStripeClient();
   const pool = getPool();
   try {
     const session = await stripe.checkout.sessions.retrieve(sessionId);
     if (session.payment_status !== 'paid') {
-      return res.status(400).json({ error: 'Payment not completed' });
+      res.status(400).json({ error: 'Payment not completed' }); return;
     }
 
     const carKey = session.metadata?.carKey;
-    if (!carKey) return res.status(400).json({ error: 'Missing car info' });
+    if (!carKey) { res.status(400).json({ error: 'Missing car info' }); return; }
 
     await pool.query(
       `UPDATE bookings SET status = 'paid', stripe_payment_intent_id = $1 WHERE stripe_session_id = $2`,
