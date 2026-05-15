@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Nav from "@/sections/Nav";
 import Hero from "@/sections/Hero";
 import Ticker from "@/sections/Ticker";
@@ -17,40 +17,22 @@ import Partner from "@/sections/Partner";
 import Footer from "@/sections/Footer";
 import WhatsAppButton from "@/sections/WhatsAppButton";
 import BookingModal from "@/sections/BookingModal";
-import BookingSuccess from "@/sections/BookingSuccess";
 
 export default function Home() {
   const [bookingOpen, setBookingOpen] = useState(false);
-  const [preselectedCar, setPreselectedCar] = useState('');
-  const [successSessionId, setSuccessSessionId] = useState('');
-
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const booking = params.get('booking');
-    const sessionId = params.get('session_id');
-    if (booking === 'success' && sessionId) {
-      setSuccessSessionId(sessionId);
-      window.history.replaceState({}, '', window.location.pathname);
-    }
-  }, []);
-
-  function openBooking(carKey?: string) {
-    setPreselectedCar(carKey || '');
-    setBookingOpen(true);
-  }
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col relative selection:bg-primary selection:text-primary-foreground font-sans">
-      <Nav onBook={() => openBooking()} />
+      <Nav onBook={() => setBookingOpen(true)} />
       <main className="flex-grow">
-        <Hero onBook={() => openBooking()} />
+        <Hero onBook={() => setBookingOpen(true)} />
         <Ticker />
         <Stats />
         <HowItWorks />
-        <Fleet onBook={(carKey) => openBooking(carKey)} />
+        <Fleet onBook={() => setBookingOpen(true)} />
         <WhyUs />
         <Platforms />
-        <Pricing onBook={() => openBooking()} />
+        <Pricing onBook={() => setBookingOpen(true)} />
         <Requirements />
         <Reviews />
         <FAQ />
@@ -64,15 +46,7 @@ export default function Home() {
       <BookingModal
         open={bookingOpen}
         onClose={() => setBookingOpen(false)}
-        preselectedCar={preselectedCar}
       />
-
-      {successSessionId && (
-        <BookingSuccess
-          sessionId={successSessionId}
-          onDone={() => setSuccessSessionId('')}
-        />
-      )}
     </div>
   );
 }
