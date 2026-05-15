@@ -65,4 +65,19 @@ router.get('/bookings', requireAdmin, async (_req, res) => {
   }
 });
 
+// Get all applications
+router.get('/applications', requireAdmin, async (_req, res) => {
+  const pool = getPool();
+  try {
+    const { rows } = await pool.query(
+      `SELECT id, name, email, phone, address, start_date, duration,
+              has_license, license_number, platforms, notes, created_at
+       FROM applications ORDER BY created_at DESC`
+    );
+    res.json({ applications: rows });
+  } finally {
+    await pool.end();
+  }
+});
+
 export default router;
