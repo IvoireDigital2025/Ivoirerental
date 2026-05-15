@@ -3,7 +3,7 @@ import { Car, RefreshCw, ToggleLeft, ToggleRight, FileText, Lock, Eye, EyeOff } 
 
 const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
 const ADMIN_TOKEN = 'ivoir-admin-2024';
-const ADMIN_PW = 'Abiddjan225@';
+const ADMIN_PW = 'IvoireAdmin2024';
 const SESSION_KEY = 'ivoire_admin_auth';
 
 interface CarRow { car_key: string; car_name: string; available: boolean; updated_at: string; }
