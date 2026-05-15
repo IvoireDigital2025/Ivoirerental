@@ -61,25 +61,6 @@ export default function BookingModal({ open, onClose }: BookingModalProps) {
       const data = await res.json();
       if (!res.ok) return setError(data.error || 'Something went wrong. Please try again.');
 
-      // Open mailto so the business inbox receives the application directly
-      const body = [
-        `Driver Application — Ivoire Rental`,
-        ``,
-        `Full Name: ${form.name}`,
-        `Email: ${form.email}`,
-        `Phone: ${form.phone}`,
-        `Address: ${form.address}`,
-        `Vehicle Needed From: ${form.startDate}`,
-        `Rental Duration: ${form.duration}`,
-        `Valid Driver's License: ${form.hasLicense}`,
-        form.licenseNumber ? `License Number: ${form.licenseNumber}` : '',
-        `Platforms: ${platforms.join(', ')}`,
-        form.notes ? `Notes: ${form.notes}` : '',
-      ].filter(Boolean).join('\n');
-
-      const mailto = `mailto:info@ivoirerental.com?subject=${encodeURIComponent('New Driver Application — ' + form.name)}&body=${encodeURIComponent(body)}`;
-      window.open(mailto, '_blank');
-
       setSuccess(true);
     } catch {
       setError('Network error — please try again.');
