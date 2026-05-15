@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { Pool } from "pg";
+import { Resend } from "resend";
 
 const router = Router();
 
@@ -7,50 +8,43 @@ function getPool() {
   return new Pool({ connectionString: process.env.DATABASE_URL });
 }
 
-function buildMessage(d: Record<string, string>) {
-  return [
-    `Full Name: ${d.name}`,
-    `Email: ${d.email}`,
-    `Phone: ${d.phone}`,
-    `Address: ${d.address}`,
-    `Start Date: ${d.startDate}`,
-    `Duration: ${d.duration}`,
-    `Valid Driver's License: ${d.hasLicense}`,
-    d.licenseNumber ? `License Number: ${d.licenseNumber}` : "",
-    `Platforms: ${d.platforms}`,
-    d.notes ? `Notes: ${d.notes}` : "",
-  ].filter(Boolean).join("\n");
+function getResend() {
+  const key = process.env["RESEND_API_KEY"];
+  if (!key) return null;
+  return new Resend(key);
 }
 
-async function sendViaWeb3Forms(d: Record<string, string>, log: any) {
-  const key = process.env["WEB3FORMS_KEY"];
-  if (!key) { log.warn("WEB3FORMS_KEY not set — skipping email"); return; }
+function buildHtml(d: Record<string, string>) {
+  const row = (label: string, value: string) => value ? `
+    <tr>
+      <td style="padding:10px 0;color:#D4A843;font-weight:bold;vertical-align:top;width:38%;border-bottom:1px solid #ffffff15;">${label}</td>
+      <td style="padding:10px 0;color:#e5e5e5;vertical-align:top;border-bottom:1px solid #ffffff15;">${value}</td>
+    </tr>` : '';
 
-  const payload = {
-    access_key: key,
-    subject: `New Driver Application — ${d.name}`,
-    from_name: "Ivoire Rental Website",
-    message: buildMessage(d),
-    email: d.email,
-    replyto: d.email,
-  };
-
-  const resp = await fetch("https://api.web3forms.com/submit", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Accept: "application/json" },
-    body: JSON.stringify(payload),
-    signal: AbortSignal.timeout(10_000),
-  });
-
-  const text = await resp.text();
-  let result: { success: boolean; message?: string };
-  try {
-    result = JSON.parse(text) as { success: boolean; message?: string };
-  } catch {
-    throw new Error(`Web3Forms returned non-JSON (status ${resp.status}): ${text.slice(0, 200)}`);
-  }
-  if (!result.success) throw new Error(result.message ?? "Web3Forms error");
-  log.info({ name: d.name }, "Application email sent via Web3Forms");
+  return `
+<div style="font-family:Arial,sans-serif;max-width:620px;margin:0 auto;background:#0d0d1a;color:#e5e5e5;border-radius:12px;overflow:hidden;">
+  <div style="background:#D4A843;padding:20px 28px;">
+    <h2 style="margin:0;color:#0d0d1a;font-size:22px;">New Driver Application</h2>
+    <p style="margin:4px 0 0;color:#0d0d1a;opacity:0.7;font-size:14px;">Ivoire Rental — Dallas Fort Worth</p>
+  </div>
+  <div style="padding:28px;">
+    <table style="width:100%;border-collapse:collapse;">
+      ${row("Full Name", d.name)}
+      ${row("Email", d.email)}
+      ${row("Phone", d.phone)}
+      ${row("Address", d.address)}
+      ${row("Start Date", d.startDate)}
+      ${row("Duration", d.duration)}
+      ${row("Valid License", d.hasLicense)}
+      ${row("License Number", d.licenseNumber)}
+      ${row("Platforms", d.platforms)}
+      ${row("Notes", d.notes)}
+    </table>
+  </div>
+  <div style="padding:16px 28px;background:#1a1a2e;font-size:12px;color:#888;">
+    Submitted via ivoirerental.com · View all applications at /admin
+  </div>
+</div>`;
 }
 
 router.post("/application", async (req, res) => {
@@ -63,7 +57,6 @@ router.post("/application", async (req, res) => {
     res.status(400).json({ error: "Missing required fields." }); return;
   }
 
-  // 1. Save to database
   const pool = getPool();
   try {
     await pool.query(
@@ -80,14 +73,21 @@ router.post("/application", async (req, res) => {
     await pool.end();
   }
 
-  // 2. Send email via Web3Forms (best-effort)
-  try {
-    await sendViaWeb3Forms(
-      { name, email, phone, address, startDate, duration, hasLicense, licenseNumber: licenseNumber || "", platforms: platforms || "", notes: notes || "" },
-      req.log
-    );
-  } catch (err: any) {
-    req.log.warn({ err }, "Web3Forms email failed (application still saved)");
+  // Send email notification via Resend
+  const resend = getResend();
+  if (resend) {
+    try {
+      await resend.emails.send({
+        from: "Ivoire Rental <onboarding@resend.dev>",
+        to: ["info@ivoirerental.com", "koneyassine49@gmail.com"],
+        replyTo: email,
+        subject: `New Driver Application — ${name}`,
+        html: buildHtml({ name, email, phone, address, startDate, duration, hasLicense, licenseNumber: licenseNumber || "", platforms: platforms || "", notes: notes || "" }),
+      });
+      req.log.info({ name }, "Application email sent via Resend");
+    } catch (err: any) {
+      req.log.warn({ err }, "Resend email failed (application still saved)");
+    }
   }
 
   res.json({ ok: true });
