@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Car, RefreshCw, ToggleLeft, ToggleRight, FileText } from 'lucide-react';
+import { Car, RefreshCw, ToggleLeft, ToggleRight, FileText, Lock, Eye, EyeOff } from 'lucide-react';
 
 const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
 const ADMIN_TOKEN = 'ivoir-admin-2024';
+const ADMIN_PW = 'Abiddjan225@';
+const SESSION_KEY = 'ivoire_admin_auth';
 
 interface CarRow { car_key: string; car_name: string; available: boolean; updated_at: string; }
 interface Booking { id: number; car_name: string; car_price_cents: number; customer_name: string; customer_email: string; customer_phone: string; status: string; created_at: string; }
@@ -10,7 +12,68 @@ interface Application { id: number; name: string; email: string; phone: string; 
 
 type Tab = 'fleet' | 'bookings' | 'applications';
 
+function LoginScreen({ onAuth }: { onAuth: () => void }) {
+  const [pw, setPw] = useState('');
+  const [show, setShow] = useState(false);
+  const [error, setError] = useState(false);
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (pw === ADMIN_PW) {
+      sessionStorage.setItem(SESSION_KEY, '1');
+      onAuth();
+    } else {
+      setError(true);
+      setPw('');
+    }
+  }
+
+  return (
+    <div className="min-h-screen bg-[#080810] flex items-center justify-center p-4">
+      <div className="w-full max-w-sm">
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-[#D4A843]/10 border border-[#D4A843]/30 mb-4">
+            <Lock size={24} className="text-[#D4A843]" />
+          </div>
+          <h1 className="text-2xl font-bold text-white" style={{ fontFamily: 'Syne, sans-serif' }}>
+            Ivoire <span style={{ color: '#D4A843' }}>Admin</span>
+          </h1>
+          <p className="text-gray-500 text-sm mt-1">Enter your password to continue</p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="bg-white/5 border border-white/10 rounded-2xl p-6 space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-300 mb-1.5">Password</label>
+            <div className="relative">
+              <input
+                autoFocus
+                type={show ? 'text' : 'password'}
+                value={pw}
+                onChange={e => { setPw(e.target.value); setError(false); }}
+                placeholder="Enter admin password"
+                className={`w-full bg-[#080810] border rounded-lg px-4 py-2.5 pr-10 text-white placeholder-gray-600 focus:outline-none text-sm transition-colors ${
+                  error ? 'border-red-500 focus:border-red-500' : 'border-white/10 focus:border-[#D4A843]'
+                }`}
+              />
+              <button type="button" onClick={() => setShow(s => !s)}
+                className="absolute right-3 top-2.5 text-gray-500 hover:text-gray-300 transition-colors">
+                {show ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            </div>
+            {error && <p className="text-red-400 text-xs mt-1.5">Incorrect password. Please try again.</p>}
+          </div>
+          <button type="submit"
+            className="w-full py-2.5 bg-[#D4A843] text-[#080810] font-bold rounded-lg hover:bg-amber-400 transition-colors text-sm">
+            Sign In
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
 export default function Admin() {
+  const [authed, setAuthed] = useState(() => sessionStorage.getItem(SESSION_KEY) === '1');
   const [tab, setTab] = useState<Tab>('applications');
   const [cars, setCars] = useState<CarRow[]>([]);
   const [bookings, setBookings] = useState<Booking[]>([]);
@@ -47,6 +110,8 @@ export default function Admin() {
     await load();
     setToggling(null);
   }
+
+  if (!authed) return <LoginScreen onAuth={() => setAuthed(true)} />;
 
   const TABS: { key: Tab; label: string; count?: number }[] = [
     { key: 'applications', label: 'Applications', count: applications.length },
