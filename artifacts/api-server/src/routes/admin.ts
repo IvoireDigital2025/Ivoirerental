@@ -7,7 +7,6 @@ function getPool() {
   return new Pool({ connectionString: process.env.DATABASE_URL });
 }
 
-// Simple token-based admin auth
 function requireAdmin(req: any, res: any, next: any) {
   const token = req.headers['x-admin-token'];
   if (token !== process.env.ADMIN_TOKEN && token !== 'ivoir-admin-2024') {
@@ -65,16 +64,50 @@ router.get('/bookings', requireAdmin, async (_req, res) => {
   }
 });
 
-// Get all applications
+// Get all applications (includes seen flag)
 router.get('/applications', requireAdmin, async (_req, res) => {
   const pool = getPool();
   try {
     const { rows } = await pool.query(
       `SELECT id, name, email, phone, address, start_date, duration,
-              has_license, license_number, platforms, notes, created_at
+              has_license, license_number, platforms, notes, created_at, seen
        FROM applications ORDER BY created_at DESC`
     );
     res.json({ applications: rows });
+  } finally {
+    await pool.end();
+  }
+});
+
+// Mark a single application as seen
+router.patch('/applications/:id/seen', requireAdmin, async (req, res): Promise<void> => {
+  const pool = getPool();
+  try {
+    await pool.query('UPDATE applications SET seen = true WHERE id = $1', [req.params.id]);
+    res.json({ ok: true });
+  } finally {
+    await pool.end();
+  }
+});
+
+// Mark all applications as seen
+router.post('/applications/seen-all', requireAdmin, async (_req, res) => {
+  const pool = getPool();
+  try {
+    await pool.query('UPDATE applications SET seen = true WHERE seen = false');
+    res.json({ ok: true });
+  } finally {
+    await pool.end();
+  }
+});
+
+// Delete a single application
+router.delete('/applications/:id', requireAdmin, async (req, res): Promise<void> => {
+  const pool = getPool();
+  try {
+    const { rowCount } = await pool.query('DELETE FROM applications WHERE id = $1', [req.params.id]);
+    if (!rowCount) { res.status(404).json({ error: 'Not found' }); return; }
+    res.json({ ok: true });
   } finally {
     await pool.end();
   }
