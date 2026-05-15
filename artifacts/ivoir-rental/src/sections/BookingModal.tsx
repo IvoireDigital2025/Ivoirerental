@@ -190,7 +190,7 @@ export default function BookingModal({ open, onClose, preselectedCar }: BookingM
                 ) : (
                   <>
                     <Car size={18} />
-                    Pay & Book Now
+                    Pay & Apply Now
                   </>
                 )}
               </button>

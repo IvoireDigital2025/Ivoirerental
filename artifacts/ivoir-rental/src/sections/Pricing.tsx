@@ -94,7 +94,7 @@ export default function Pricing({ onBook }: { onBook?: () => void }) {
                     : 'bg-white/10 text-white hover:bg-white/20'
                 }`}
               >
-                Book Now
+                Apply Now
               </button>
             </motion.div>
           ))}

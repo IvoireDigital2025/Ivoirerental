@@ -63,7 +63,7 @@ export default function Nav({ onBook }: { onBook?: () => void }) {
               onClick={onBook}
               className="px-6 py-2.5 bg-primary text-primary-foreground text-sm font-bold rounded-md hover:bg-accent transition-colors"
             >
-              Book Now
+              Apply Now
             </button>
           </div>
 
@@ -101,7 +101,7 @@ export default function Nav({ onBook }: { onBook?: () => void }) {
                 onClick={() => { setMobileMenuOpen(false); onBook?.(); }}
                 className="mt-4 px-6 py-3 bg-primary text-primary-foreground text-center font-bold rounded-md hover:bg-accent transition-colors w-full"
               >
-                Book Now
+                Apply Now
               </button>
             </div>
           </motion.div>

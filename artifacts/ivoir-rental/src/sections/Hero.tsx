@@ -208,7 +208,7 @@ export default function Hero({ onBook }: { onBook?: () => void }) {
               data-testid="hero-btn-apply"
               className="inline-flex justify-center items-center px-8 py-4 bg-primary text-primary-foreground font-bold rounded-md hover:bg-accent transition-colors duration-300"
             >
-              Book Now
+              Apply Now
             </button>
             <a 
               href="#fleet"
