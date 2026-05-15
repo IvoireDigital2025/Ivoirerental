@@ -7,9 +7,13 @@ import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
 const rawPort = process.env.PORT;
 const port = rawPort && !Number.isNaN(Number(rawPort)) ? Number(rawPort) : 3000;
 const basePath = process.env.BASE_PATH ?? "/";
+const web3formsKey = process.env.WEB3FORMS_KEY ?? "";
 
 export default defineConfig({
   base: basePath,
+  define: {
+    'import.meta.env.VITE_WEB3FORMS_KEY': JSON.stringify(web3formsKey),
+  },
   plugins: [
     react(),
     tailwindcss(),

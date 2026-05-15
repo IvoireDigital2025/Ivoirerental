@@ -52,14 +52,46 @@ export default function BookingModal({ open, onClose }: BookingModalProps) {
     setError('');
     if (platforms.length === 0) return setError('Please select at least one platform.');
     setLoading(true);
+    const payload = { ...form, platforms: platforms.join(', ') };
     try {
+      // 1. Save to DB
       const res = await fetch(`${BASE}/api/application`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, platforms: platforms.join(', ') }),
+        body: JSON.stringify(payload),
       });
       const data = await res.json();
       if (!res.ok) return setError(data.error || 'Something went wrong. Please try again.');
+
+      // 2. Send email via Web3Forms directly from browser (avoids server-side Cloudflare block)
+      const w3Key = import.meta.env.VITE_WEB3FORMS_KEY;
+      if (w3Key) {
+        const message = [
+          `Full Name: ${payload.name}`,
+          `Email: ${payload.email}`,
+          `Phone: ${payload.phone}`,
+          `Address: ${payload.address}`,
+          `Start Date: ${payload.startDate}`,
+          `Duration: ${payload.duration}`,
+          `Valid Driver's License: ${payload.hasLicense}`,
+          payload.licenseNumber ? `License Number: ${payload.licenseNumber}` : '',
+          `Platforms: ${payload.platforms}`,
+          payload.notes ? `Notes: ${payload.notes}` : '',
+        ].filter(Boolean).join('\n');
+
+        await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({
+            access_key: w3Key,
+            subject: `New Driver Application — ${payload.name}`,
+            from_name: 'Ivoire Rental Website',
+            message,
+            email: payload.email,
+            replyto: payload.email,
+          }),
+        });
+      }
 
       setSuccess(true);
     } catch {
