@@ -23,8 +23,8 @@ async function sendNotificationEmail(data: {
   startDate: string; duration: string; hasLicense: string;
   licenseNumber: string; platforms: string; notes: string;
 }) {
-  const to = process.env.SMTP_USER;
-  if (!to) return;
+  const to = "info@ivoirerental.com";
+  if (!process.env.SMTP_USER) return;
 
   const transporter = getTransporter();
   const platformList = data.platforms
